@@ -36,6 +36,7 @@ import org.apache.ibatis.transaction.Transaction;
  * @author Clinton Begin
  * @author Eduardo Macarron
  */
+// 二级缓存处理
 public class CachingExecutor implements Executor {
 
   private final Executor delegate;
@@ -165,6 +166,7 @@ public class CachingExecutor implements Executor {
     delegate.clearLocalCache();
   }
 
+  // 刷新缓存
   private void flushCacheIfRequired(MappedStatement ms) {
     Cache cache = ms.getCache();
     if (cache != null && ms.isFlushCacheRequired()) {

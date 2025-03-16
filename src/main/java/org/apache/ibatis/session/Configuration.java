@@ -742,6 +742,7 @@ public class Configuration {
     } else {
       executor = new SimpleExecutor(this, transaction);
     }
+    // 判断是否开启二级缓存，是，则用CachingExecutor包装executor
     if (cacheEnabled) {
       executor = new CachingExecutor(executor);
     }
