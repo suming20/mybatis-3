@@ -155,6 +155,7 @@ public class Configuration {
   protected final TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
   protected final LanguageDriverRegistry languageRegistry = new LanguageDriverRegistry();
 
+  // MyBatis在解析生成MappedStatement对象时就会存到Configuration对象的Map<String, MappedStatement> mappedStatements属性中
   protected final Map<String, MappedStatement> mappedStatements = new StrictMap<MappedStatement>(
       "Mapped Statements collection")
           .conflictMessageProducer((savedValue, targetValue) -> ". please check " + savedValue.getResource() + " and "
