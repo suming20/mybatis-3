@@ -139,6 +139,7 @@ public class ClassLoaderWrapper {
 
     URL url;
 
+    // 循环classLoader 通过指定的或默认的ClassLoader读取文件
     for (ClassLoader cl : classLoader) {
 
       if (null != cl) {
@@ -199,9 +200,13 @@ public class ClassLoaderWrapper {
 
   ClassLoader[] getClassLoaders(ClassLoader classLoader) {
     return new ClassLoader[]{
+      //参数指定的类加载器
         classLoader,
+      // 系统指定的默认类加载器
         defaultClassLoader,
+      // 当前线程绑定的类加载器
         Thread.currentThread().getContextClassLoader(),
+      // 当前类使用的额类加载器
         getClass().getClassLoader(),
         systemClassLoader};
   }
