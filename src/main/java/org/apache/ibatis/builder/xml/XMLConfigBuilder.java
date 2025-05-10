@@ -116,6 +116,7 @@ public class XMLConfigBuilder extends BaseBuilder {
       loadCustomVfs(settings);
       loadCustomLogImpl(settings);
       typeAliasesElement(root.evalNode("typeAliases"));
+      // plugins解析
       pluginElement(root.evalNode("plugins"));
       objectFactoryElement(root.evalNode("objectFactory"));
       objectWrapperFactoryElement(root.evalNode("objectWrapperFactory"));
@@ -194,10 +195,15 @@ public class XMLConfigBuilder extends BaseBuilder {
   private void pluginElement(XNode parent) throws Exception {
     if (parent != null) {
       for (XNode child : parent.getChildren()) {
+        // 获取拦截器
         String interceptor = child.getStringAttribute("interceptor");
+        // 获取配置的properties属性
         Properties properties = child.getChildrenAsProperties();
+        // 根据配置文件中配置的拦截器类的全限定名，进行反射初始化
         Interceptor interceptorInstance = (Interceptor) resolveClass(interceptor).getDeclaredConstructor().newInstance();
+        // setProperties的调用
         interceptorInstance.setProperties(properties);
+        // 添加到configuration中
         configuration.addInterceptor(interceptorInstance);
       }
     }
