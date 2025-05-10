@@ -42,13 +42,20 @@ public class SqlSourceBuilder extends BaseBuilder {
 
   public SqlSource parse(String originalSql, Class<?> parameterType, Map<String, Object> additionalParameters) {
     ParameterMappingTokenHandler handler = new ParameterMappingTokenHandler(configuration, parameterType, additionalParameters);
+    // 创建分词解析器
     GenericTokenParser parser = new GenericTokenParser("#{", "}", handler);
     String sql;
     if (configuration.isShrinkWhitespacesInSql()) {
       sql = parser.parse(removeExtraWhitespaces(originalSql));
     } else {
+      // 解析#{}
       sql = parser.parse(originalSql);
     }
+    /**
+     * 将解析后的SQL信息，封装到StaticSQLSource中
+     * sql信息中是带有？号的，？相关的参数信息封装到ParameterMapping中
+     * StaticSqlSource里面getBoundSql封装相关信息
+     */
     return new StaticSqlSource(configuration, sql, handler.getParameterMappings());
   }
 

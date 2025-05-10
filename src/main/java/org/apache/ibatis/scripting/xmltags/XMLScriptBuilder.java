@@ -47,6 +47,7 @@ public class XMLScriptBuilder extends BaseBuilder {
     super(configuration);
     this.context = context;
     this.parameterType = parameterType;
+    // 初始化动态SQL中的节点处理器集合
     initNodeHandlerMap();
   }
 
@@ -64,11 +65,18 @@ public class XMLScriptBuilder extends BaseBuilder {
   }
 
   public SqlSource parseScriptNode() {
+    /**
+     * 将带有${}号的SQL信息封装到TextSqlNode
+     * 将带有#{}号的SQL信息封装到StaticTextSqlNode
+     * 将带有动态SQL标签的SQL信息封装到不同的SqlNode中
+     */
     MixedSqlNode rootSqlNode = parseDynamicTags(context);
     SqlSource sqlSource;
     if (isDynamic) {
+      // 如果SQL中包含了${}和动态SQL语句，则将SQLNode封装到DynamicSqlSource
       sqlSource = new DynamicSqlSource(configuration, rootSqlNode);
     } else {
+      // 如果SQL中包含了#{}，则将sqlNode封装到RawSqlSource中，并指定parameterType
       sqlSource = new RawSqlSource(configuration, rootSqlNode, parameterType);
     }
     return sqlSource;
@@ -90,6 +98,7 @@ public class XMLScriptBuilder extends BaseBuilder {
         }
       } else if (child.getNode().getNodeType() == Node.ELEMENT_NODE) { // issue #628
         String nodeName = child.getNode().getNodeName();
+        // 动态SQL处理器
         NodeHandler handler = nodeHandlerMap.get(nodeName);
         if (handler == null) {
           throw new BuilderException("Unknown element <" + nodeName + "> in SQL statement.");

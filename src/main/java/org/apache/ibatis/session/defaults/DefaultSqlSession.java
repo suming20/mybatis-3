@@ -147,7 +147,10 @@ public class DefaultSqlSession implements SqlSession {
 
   private <E> List<E> selectList(String statement, Object parameter, RowBounds rowBounds, ResultHandler handler) {
     try {
+      // rowBounds分页参数 ResultHandler结果集处理
+      // 根据传入的statementId,获取MappedStatement对象
       MappedStatement ms = configuration.getMappedStatement(statement);
+      // wrapCollection用来装饰集合或数组参数
       return executor.query(ms, wrapCollection(parameter), rowBounds, handler);
     } catch (Exception e) {
       throw ExceptionFactory.wrapException("Error querying database.  Cause: " + e, e);

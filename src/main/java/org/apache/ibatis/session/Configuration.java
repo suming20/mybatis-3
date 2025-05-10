@@ -663,7 +663,9 @@ public class Configuration {
   }
 
   public StatementHandler newStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
+    // 创建路由工功能StatementHandler,根据MappedStatement中的StatementType
     StatementHandler statementHandler = new RoutingStatementHandler(executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);
+    // 插件机制：对核心对象进行拦截
     statementHandler = (StatementHandler) interceptorChain.pluginAll(statementHandler);
     return statementHandler;
   }
@@ -683,9 +685,11 @@ public class Configuration {
     } else {
       executor = new SimpleExecutor(this, transaction);
     }
+    // 是否启用二级缓存
     if (cacheEnabled) {
       executor = new CachingExecutor(executor);
     }
+    // 拦截器插件
     executor = (Executor) interceptorChain.pluginAll(executor);
     return executor;
   }

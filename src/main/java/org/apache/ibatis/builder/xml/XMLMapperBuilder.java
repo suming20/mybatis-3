@@ -134,6 +134,7 @@ public class XMLMapperBuilder extends BaseBuilder {
     if (configuration.getDatabaseId() != null) {
       buildStatementFromContext(list, configuration.getDatabaseId());
     }
+    // 构建MappedStatement
     buildStatementFromContext(list, null);
   }
 

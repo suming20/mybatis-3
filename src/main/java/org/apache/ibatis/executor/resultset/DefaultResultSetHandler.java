@@ -178,10 +178,12 @@ public class DefaultResultSetHandler implements ResultSetHandler {
   //
   // HANDLE RESULT SETS
   //
+   // 获取resultSet，获取映射关系，根据映射关系封装实体
   @Override
   public List<Object> handleResultSets(Statement stmt) throws SQLException {
     ErrorContext.instance().activity("handling results").object(mappedStatement.getId());
 
+    // 创建结果容器
     final List<Object> multipleResults = new ArrayList<>();
 
     int resultSetCount = 0;
