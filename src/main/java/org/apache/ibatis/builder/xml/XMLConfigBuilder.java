@@ -80,6 +80,7 @@ public class XMLConfigBuilder extends BaseBuilder {
   }
 
   public XMLConfigBuilder(InputStream inputStream, String environment, Properties props) {
+    // XPathParser基于java Xpath解析器
     this(new XPathParser(inputStream, true, props, new XMLMapperEntityResolver()), environment, props);
   }
 
@@ -127,7 +128,7 @@ public class XMLConfigBuilder extends BaseBuilder {
       environmentsElement(root.evalNode("environments"));
       databaseIdProviderElement(root.evalNode("databaseIdProvider"));
       typeHandlerElement(root.evalNode("typeHandlers"));
-      // 解析 mappers
+      // 解析 mappers 加载映射文件主流程
       mapperElement(root.evalNode("mappers"));
     } catch (Exception e) {
       throw new BuilderException("Error parsing SQL Mapper Configuration. Cause: " + e, e);
@@ -393,6 +394,7 @@ public class XMLConfigBuilder extends BaseBuilder {
         if ("package".equals(child.getName())) {
           // 获取mapper接口和mapper接口对应的包名
           String mapperPackage = child.getStringAttribute("name");
+          // 将包下所有的mapper接口以及它的代理对象存储到一个map集合中，key为mapper接口类型，value为代理对象工厂
           configuration.addMappers(mapperPackage);
         } else {
           String resource = child.getStringAttribute("resource");

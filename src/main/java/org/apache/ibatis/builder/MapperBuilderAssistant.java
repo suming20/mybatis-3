@@ -295,6 +295,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
     }
 
     MappedStatement statement = statementBuilder.build();
+    // 将mappedStatement对象存储到Configuration中的Map集合中，key为statement的id（类似user.getUserById)，value为MappedStatement对象
     configuration.addMappedStatement(statement);
     return statement;
   }

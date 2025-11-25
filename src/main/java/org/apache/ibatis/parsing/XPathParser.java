@@ -125,6 +125,7 @@ public class XPathParser {
 
   public XPathParser(InputStream inputStream, boolean validation, Properties variables, EntityResolver entityResolver) {
     commonConstructor(validation, variables, entityResolver);
+    // 解析XML文档为Document对象
     this.document = createDocument(new InputSource(inputStream));
   }
 
@@ -209,6 +210,7 @@ public class XPathParser {
   }
 
   public XNode evalNode(String expression) {
+    // 根据xpath，获取指定节点
     return evalNode(document, expression);
   }
 
@@ -232,11 +234,14 @@ public class XPathParser {
     // important: this must only be called AFTER common constructor
     try {
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+      // 进行dtd或者scheme校验
       factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       factory.setValidating(validation);
 
       factory.setNamespaceAware(false);
+      // 设置忽略注释
       factory.setIgnoringComments(true);
+      // 设置是否忽略空白
       factory.setIgnoringElementContentWhitespace(false);
       factory.setCoalescing(false);
       factory.setExpandEntityReferences(true);
@@ -259,6 +264,7 @@ public class XPathParser {
           // NOP
         }
       });
+      // 通过document解析，获取document对象
       return builder.parse(inputSource);
     } catch (Exception e) {
       throw new BuilderException("Error creating document instance.  Cause: " + e, e);

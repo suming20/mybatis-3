@@ -75,6 +75,7 @@ public class SqlSessionFactoryBuilder {
     return build(inputStream, null, null);
   }
 
+  // environment是传入的运行环境的id值（configuration中environment标签的id值）
   public SqlSessionFactory build(InputStream inputStream, String environment) {
     return build(inputStream, environment, null);
   }
@@ -85,7 +86,10 @@ public class SqlSessionFactoryBuilder {
 
   public SqlSessionFactory build(InputStream inputStream, String environment, Properties properties) {
     try {
+      // XMLConfigBuilder:用来解析XML配置文件，使用构建者模式，降低耦合，分离复杂对象的创建
       XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, environment, properties);
+      // 使用XPATH解析XML配置文件，将配置文件封装到Configuration对象中
+      // 返回DefaultSqlSessionFactory对象，该对象拥有Configuration对象
       return build(parser.parse());
     } catch (Exception e) {
       throw ExceptionFactory.wrapException("Error building SqlSession.", e);

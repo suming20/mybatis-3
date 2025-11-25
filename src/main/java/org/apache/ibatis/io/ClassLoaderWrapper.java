@@ -109,6 +109,7 @@ public class ClassLoaderWrapper {
    * @return the resource or null
    */
   InputStream getResourceAsStream(String resource, ClassLoader[] classLoader) {
+    // 循环ClassLoader，通过指定或者默认的ClassLoader读取文件
     for (ClassLoader cl : classLoader) {
       if (null != cl) {
 
