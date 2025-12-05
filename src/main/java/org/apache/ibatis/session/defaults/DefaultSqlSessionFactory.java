@@ -48,16 +48,19 @@ public class DefaultSqlSessionFactory implements SqlSessionFactory {
     return openSessionFromDataSource(configuration.getDefaultExecutorType(), null, false);
   }
 
+  // 参数：事务自动提交，默认为false
   @Override
   public SqlSession openSession(boolean autoCommit) {
     return openSessionFromDataSource(configuration.getDefaultExecutorType(), null, autoCommit);
   }
 
+  // 参数：执行器类型
   @Override
   public SqlSession openSession(ExecutorType execType) {
     return openSessionFromDataSource(execType, null, false);
   }
 
+  // 参数：事务隔离级别
   @Override
   public SqlSession openSession(TransactionIsolationLevel level) {
     return openSessionFromDataSource(configuration.getDefaultExecutorType(), level, false);
@@ -73,6 +76,7 @@ public class DefaultSqlSessionFactory implements SqlSessionFactory {
     return openSessionFromDataSource(execType, null, autoCommit);
   }
 
+  // 参数：数据库连接
   @Override
   public SqlSession openSession(Connection connection) {
     return openSessionFromConnection(configuration.getDefaultExecutorType(), connection);

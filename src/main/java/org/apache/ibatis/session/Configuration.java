@@ -125,7 +125,21 @@ public class Configuration {
   protected Integer defaultStatementTimeout;
   protected Integer defaultFetchSize;
   protected ResultSetType defaultResultSetType;
+  /*
+  * 默认执行器类型
+  * BaseExecutor：封装了公共的方法及公共变量的类
+  *   SimpleExecutor：简单执行器，执行一次sql，就会创建一个statement；
+  *   BatchExecutor：批量执行
+  *   ResumeExecutor：重用执行器，维护map集合，每次执行完成的statement都会缓存；
+  * CachingExecutor：缓存执行器，装饰者模式；
+  */
   protected ExecutorType defaultExecutorType = ExecutorType.SIMPLE;
+  /**
+   * 指定Mybatis如何映射到字段或属性
+   * NONE，表示取消自动映射
+   * PARTIAL，只会映射没有嵌套结果集的映射的结果集
+   * FULL 会自动映射任意复杂类型的结果集
+   */
   protected AutoMappingBehavior autoMappingBehavior = AutoMappingBehavior.PARTIAL;
   protected AutoMappingUnknownColumnBehavior autoMappingUnknownColumnBehavior = AutoMappingUnknownColumnBehavior.NONE;
 
@@ -686,6 +700,7 @@ public class Configuration {
       executor = new SimpleExecutor(this, transaction);
     }
     // 是否启用二级缓存
+    // cacheEnabled 默认是true
     if (cacheEnabled) {
       executor = new CachingExecutor(executor);
     }
