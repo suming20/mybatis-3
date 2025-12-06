@@ -34,6 +34,8 @@ import org.apache.ibatis.session.RowBounds;
 
 /**
  * @author Clinton Begin
+ * 普通语句处理器
+ * statement对象，处理普通的，不带参数运行的sql，即执行简单的字符串语句；
  */
 public class SimpleStatementHandler extends BaseStatementHandler {
 

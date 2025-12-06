@@ -153,6 +153,7 @@ public abstract class BaseExecutor implements Executor {
     List<E> list;
     try {
       queryStack++;
+      // 从一级缓存中获取数据
       list = resultHandler == null ? (List<E>) localCache.getObject(key) : null;
       if (list != null) {
         handleLocallyCachedOutputParameters(ms, key, parameter, boundSql);
@@ -200,8 +201,10 @@ public abstract class BaseExecutor implements Executor {
     if (closed) {
       throw new ExecutorException("Executor was closed.");
     }
+    // 内部重写了equals和hashCode方法
     CacheKey cacheKey = new CacheKey();
     cacheKey.update(ms.getId());
+    // 分页参数
     cacheKey.update(rowBounds.getOffset());
     cacheKey.update(rowBounds.getLimit());
     cacheKey.update(boundSql.getSql());
@@ -222,11 +225,13 @@ public abstract class BaseExecutor implements Executor {
           MetaObject metaObject = configuration.newMetaObject(parameterObject);
           value = metaObject.getValue(propertyName);
         }
+        // 参数的值
         cacheKey.update(value);
       }
     }
     if (configuration.getEnvironment() != null) {
       // issue #176
+      // 当前环境的值也会设置
       cacheKey.update(configuration.getEnvironment().getId());
     }
     return cacheKey;
@@ -324,6 +329,7 @@ public abstract class BaseExecutor implements Executor {
 
   private <E> List<E> queryFromDatabase(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql) throws SQLException {
     List<E> list;
+    // 首先向本地缓存存入一个ExecutionPlaceHolder的枚举类占位value
     localCache.putObject(key, EXECUTION_PLACEHOLDER);
     try {
       list = doQuery(ms, parameter, rowBounds, resultHandler, boundSql);
@@ -332,6 +338,7 @@ public abstract class BaseExecutor implements Executor {
     }
     localCache.putObject(key, list);
     if (ms.getStatementType() == StatementType.CALLABLE) {
+      // 如果MappedStatement的类型为CALLABLE，则向localOutputParameterCache中存入value为parameter的缓存
       localOutputParameterCache.putObject(key, parameter);
     }
     return list;

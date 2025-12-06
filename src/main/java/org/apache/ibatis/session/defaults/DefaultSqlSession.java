@@ -142,6 +142,7 @@ public class DefaultSqlSession implements SqlSession {
 
   @Override
   public <E> List<E> selectList(String statement, Object parameter, RowBounds rowBounds) {
+    // 参数4，结果集处理
     return selectList(statement, parameter, rowBounds, Executor.NO_RESULT_HANDLER);
   }
 

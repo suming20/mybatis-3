@@ -70,14 +70,17 @@ public class CacheKey implements Cloneable, Serializable {
   }
 
   public void update(Object object) {
+    // 获取参数Object的hash值
     int baseHashCode = object == null ? 1 : ArrayUtil.hashCode(object);
 
+    // 更新count，checksum, hashcode 的值
     count++;
     checksum += baseHashCode;
     baseHashCode *= count;
 
     hashcode = multiplier * hashcode + baseHashCode;
 
+    // 将对象添加的list集合
     updateList.add(object);
   }
 
