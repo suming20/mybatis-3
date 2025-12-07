@@ -61,12 +61,15 @@ public class DefaultParameterHandler implements ParameterHandler {
   @Override
   public void setParameters(PreparedStatement ps) {
     ErrorContext.instance().activity("setting parameters").object(mappedStatement.getParameterMap().getId());
+    // 获取boundsql中的参数映射信息
     List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
     if (parameterMappings != null) {
       for (int i = 0; i < parameterMappings.size(); i++) {
         ParameterMapping parameterMapping = parameterMappings.get(i);
+        // 只有入参类型才设置PreparedStatement
         if (parameterMapping.getMode() != ParameterMode.OUT) {
           Object value;
+          // 取出参数名。例如id
           String propertyName = parameterMapping.getProperty();
           if (boundSql.hasAdditionalParameter(propertyName)) { // issue #448 ask first for additional params
             value = boundSql.getAdditionalParameter(propertyName);
@@ -75,6 +78,7 @@ public class DefaultParameterHandler implements ParameterHandler {
           } else if (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) {
             value = parameterObject;
           } else {
+            // 从当前实际传入的参数中获取指定的key('id')的value值
             MetaObject metaObject = configuration.newMetaObject(parameterObject);
             value = metaObject.getValue(propertyName);
           }
@@ -84,6 +88,7 @@ public class DefaultParameterHandler implements ParameterHandler {
             jdbcType = configuration.getJdbcTypeForNull();
           }
           try {
+            // 重点是调用每个参数对应的typeHandler的setParameter方法为ps设置正确的值
             typeHandler.setParameter(ps, i + 1, value, jdbcType);
           } catch (TypeException | SQLException e) {
             throw new TypeException("Could not set parameters for mapping: " + parameterMapping + ". Cause: " + e, e);
