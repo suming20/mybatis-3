@@ -117,6 +117,7 @@ public class XPathParser {
     this.document = createDocument(new InputSource(new StringReader(xml)));
   }
 
+  // reader, 是否进行DTD校验，属性配置，XML实体节点解析器
   public XPathParser(Reader reader, boolean validation, Properties variables, EntityResolver entityResolver) {
     commonConstructor(validation, variables, entityResolver);
     // 将XML配置文件解析为document形式
@@ -243,10 +244,13 @@ public class XPathParser {
       factory.setIgnoringComments(true);
       // 设置是否忽略空白
       factory.setIgnoringElementContentWhitespace(false);
+      // 是否将CDATA节点转为文本节点
       factory.setCoalescing(false);
+      // 是否展开实体引用节点，应该是sql片段引用的关键
       factory.setExpandEntityReferences(true);
 
       DocumentBuilder builder = factory.newDocumentBuilder();
+      // 设置解析器，就是上面的XMLMapperEntityResolver;
       builder.setEntityResolver(entityResolver);
       builder.setErrorHandler(new ErrorHandler() {
         @Override

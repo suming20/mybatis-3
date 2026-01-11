@@ -50,6 +50,8 @@ import org.apache.ibatis.type.JdbcType;
 /**
  * @author Clinton Begin
  * @author Kazuki Shimizu
+ * 加载和解析都委托给XPathParser，最终使用的是jdk自带的xml解析器，而非第三方的，例如dom4j
+ * 底层使用xpath方式进行节点解析
  */
 public class XMLConfigBuilder extends BaseBuilder {
 
