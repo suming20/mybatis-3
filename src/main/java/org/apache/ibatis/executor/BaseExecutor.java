@@ -134,8 +134,9 @@ public abstract class BaseExecutor implements Executor {
   public <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler) throws SQLException {
     // 获取绑定的SQL语句 select * from user where id = ?
     BoundSql boundSql = ms.getBoundSql(parameter);
-    // 生成换粗key
+    // 生成缓存key
     CacheKey key = createCacheKey(ms, parameter, rowBounds, boundSql);
+    // 委托给重载的query
     return query(ms, parameter, rowBounds, resultHandler, key, boundSql);
   }
 
@@ -202,6 +203,7 @@ public abstract class BaseExecutor implements Executor {
       throw new ExecutorException("Executor was closed.");
     }
     // 内部重写了equals和hashCode方法
+    // 根据映射语句id，分页信息，jdbc规范化的预编译sql，所有映射参数的值以及环境id，计算出缓存Key
     CacheKey cacheKey = new CacheKey();
     cacheKey.update(ms.getId());
     // 分页参数
@@ -311,6 +313,8 @@ public abstract class BaseExecutor implements Executor {
   }
 
   private void handleLocallyCachedOutputParameters(MappedStatement ms, CacheKey key, Object parameter, BoundSql boundSql) {
+    // 只处理存储过程和函数中的出参，因为存储过程和函数的返回不是通过ResultMap而是ParameterMap来的
+    // 所以只要把缓存的非IN模式参数取出来设置到Parameter属性上去
     if (ms.getStatementType() == StatementType.CALLABLE) {
       final Object cachedParameter = localOutputParameterCache.getObject(key);
       if (cachedParameter != null && parameter != null) {
@@ -332,11 +336,13 @@ public abstract class BaseExecutor implements Executor {
     // 首先向本地缓存存入一个ExecutionPlaceHolder的枚举类占位value
     localCache.putObject(key, EXECUTION_PLACEHOLDER);
     try {
+      // 抽象方法，每个具体的执行器都需要自己去实现
       list = doQuery(ms, parameter, rowBounds, resultHandler, boundSql);
     } finally {
       localCache.removeObject(key);
     }
     localCache.putObject(key, list);
+    // 如果是存储过程类型的，则把查询参数放到本地的出参缓存中去，所以第一次一定为空
     if (ms.getStatementType() == StatementType.CALLABLE) {
       // 如果MappedStatement的类型为CALLABLE，则向localOutputParameterCache中存入value为parameter的缓存
       localOutputParameterCache.putObject(key, parameter);
