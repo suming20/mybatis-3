@@ -53,6 +53,7 @@ public class DefaultObjectFactory implements ObjectFactory, Serializable {
     return (T) instantiateClass(classToCreate, constructorArgTypes, constructorArgs);
   }
 
+  // 通过反射找到与参数匹配的构造方法，然后基于反射调用该构造方法生成一个对象
   private  <T> T instantiateClass(Class<T> type, List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {
     try {
       Constructor<T> constructor;
@@ -89,6 +90,7 @@ public class DefaultObjectFactory implements ObjectFactory, Serializable {
     }
   }
 
+  // 传入目标类型是一个接口时，给出一个符合该接口的实现
   protected Class<?> resolveInterface(Class<?> type) {
     Class<?> classToCreate;
     if (type == List.class || type == Collection.class || type == Iterable.class) {

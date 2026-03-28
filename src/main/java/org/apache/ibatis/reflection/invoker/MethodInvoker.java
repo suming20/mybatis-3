@@ -22,6 +22,7 @@ import org.apache.ibatis.reflection.Reflector;
 
 /**
  * @author Clinton Begin
+ * 负责对象其他方法的操作
  */
 public class MethodInvoker implements Invoker {
 
@@ -31,6 +32,7 @@ public class MethodInvoker implements Invoker {
   public MethodInvoker(Method method) {
     this.method = method;
 
+    // type赋值
     if (method.getParameterTypes().length == 1) {
       type = method.getParameterTypes()[0];
     } else {

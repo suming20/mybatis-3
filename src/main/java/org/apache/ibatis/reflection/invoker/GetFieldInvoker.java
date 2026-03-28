@@ -34,6 +34,7 @@ public class GetFieldInvoker implements Invoker {
     try {
       return field.get(target);
     } catch (IllegalAccessException e) {
+      // 如果属性的访问权限可以修改
       if (Reflector.canControlMemberAccessible()) {
         field.setAccessible(true);
         return field.get(target);
