@@ -30,8 +30,11 @@ public class ExceptionUtil {
   public static Throwable unwrapThrowable(Throwable wrapped) {
     Throwable unwrapped = wrapped;
     while (true) {
+      // 异常拆包，获取对应的target
+      // InvocationTargetException checkedException反射相关
       if (unwrapped instanceof InvocationTargetException) {
         unwrapped = ((InvocationTargetException) unwrapped).getTargetException();
+        // 用来获取UndeclaredThrowableException 未在代理类或者被代理类公共接口或父类中声明的异常
       } else if (unwrapped instanceof UndeclaredThrowableException) {
         unwrapped = ((UndeclaredThrowableException) unwrapped).getUndeclaredThrowable();
       } else {

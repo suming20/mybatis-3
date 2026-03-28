@@ -29,6 +29,7 @@ import org.apache.ibatis.reflection.wrapper.ObjectWrapperFactory;
 
 /**
  * @author Clinton Begin
+ * 元对象，针对普通Object对象的反射包装类
  */
 public class MetaObject {
 

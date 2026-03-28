@@ -20,6 +20,7 @@ import org.apache.ibatis.reflection.ReflectionException;
 
 /**
  * @author Clinton Begin
+ * mybatis允许用户通过配置文件中的objectWrapperFactory节点来注入新的ObjectWrapperFactory
  */
 public class DefaultObjectWrapperFactory implements ObjectWrapperFactory {
 
