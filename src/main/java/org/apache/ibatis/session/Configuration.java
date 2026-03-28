@@ -97,6 +97,7 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 
 /**
  * @author Clinton Begin
+ * 保存了配置文件中的所有设置信息，也保存了映射文件的信息
  */
 public class Configuration {
 
