@@ -101,10 +101,13 @@ public class TypeParameterResolver {
     Type componentType = genericArrayType.getGenericComponentType();
     Type resolvedComponentType = null;
     if (componentType instanceof TypeVariable) {
+      // 类变量：例如genericArrayType为T[]
       resolvedComponentType = resolveTypeVar((TypeVariable<?>) componentType, srcType, declaringClass);
     } else if (componentType instanceof GenericArrayType) {
+      // 泛型列表 T[][]
       resolvedComponentType = resolveGenericArrayType((GenericArrayType) componentType, srcType, declaringClass);
     } else if (componentType instanceof ParameterizedType) {
+      // 参数化类型 Collection<T>[]
       resolvedComponentType = resolveParameterizedType((ParameterizedType) componentType, srcType, declaringClass);
     }
     if (resolvedComponentType instanceof Class) {
