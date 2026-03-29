@@ -31,6 +31,7 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
+// 参数名解析器，用来按顺序列出方法中的虚参，并对实参进行名称标注
 public class ParamNameResolver {
 
   public static final String GENERIC_NAME_PREFIX = "param";
@@ -49,9 +50,11 @@ public class ParamNameResolver {
    * <li>aMethod(int a, int b) -&gt; {{0, "0"}, {1, "1"}}</li>
    * <li>aMethod(int a, RowBounds rb, int b) -&gt; {{0, "0"}, {2, "1"}}</li>
    * </ul>
+   * 方法入参的次序表，值为参数名称或者@Param注解的值
    */
   private final SortedMap<Integer, String> names;
 
+  // 是否含有@Param注解
   private boolean hasParamAnnotation;
 
   public ParamNameResolver(Configuration config, Method method) {

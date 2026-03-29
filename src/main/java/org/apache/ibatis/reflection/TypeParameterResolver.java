@@ -27,6 +27,7 @@ import java.util.Arrays;
 
 /**
  * @author Iwao AVE!
+ * 泛型参数解析器，帮助mybatis推断出属性，返回值，输入参数中泛型的具体类型
  */
 public class TypeParameterResolver {
 
@@ -95,6 +96,7 @@ public class TypeParameterResolver {
     }
   }
 
+  // 解析泛型列表的实际类型
   private static Type resolveGenericArrayType(GenericArrayType genericArrayType, Type srcType, Class<?> declaringClass) {
     Type componentType = genericArrayType.getGenericComponentType();
     Type resolvedComponentType = null;
@@ -112,6 +114,13 @@ public class TypeParameterResolver {
     }
   }
 
+  /**
+   * 解析参数化类型的实际结果
+   * @param parameterizedType 参数化类型的变量
+   * @param srcType 该变量所属的类
+   * @param declaringClass 定义该变量的类
+   * @return 参数化类型的实际结果
+   */
   private static ParameterizedType resolveParameterizedType(ParameterizedType parameterizedType, Type srcType, Class<?> declaringClass) {
     Class<?> rawType = (Class<?>) parameterizedType.getRawType();
     Type[] typeArgs = parameterizedType.getActualTypeArguments();
@@ -152,6 +161,13 @@ public class TypeParameterResolver {
     return result;
   }
 
+  /**
+   * 解析泛型变量的实际结果
+   * @param typeVar 泛型变量
+   * @param srcType 该变量所属的类
+   * @param declaringClass 定义该变量的类
+   * @return 泛型变量的实际结果
+   */
   private static Type resolveTypeVar(TypeVariable<?> typeVar, Type srcType, Class<?> declaringClass) {
     Type result;
     Class<?> clazz;
@@ -164,7 +180,9 @@ public class TypeParameterResolver {
       throw new IllegalArgumentException("The 2nd arg must be Class or ParameterizedType, but was: " + srcType.getClass());
     }
 
+    // 变量所属的类和定义变量的类是一致的
     if (clazz == declaringClass) {
+      // 确定变量的上界
       Type[] bounds = typeVar.getBounds();
       if (bounds.length > 0) {
         return bounds[0];
