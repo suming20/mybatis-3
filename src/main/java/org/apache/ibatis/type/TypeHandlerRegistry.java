@@ -51,16 +51,23 @@ import org.apache.ibatis.session.Configuration;
 /**
  * @author Clinton Begin
  * @author Kazuki Shimizu
+ * 类型处理器注册表，内部维护了所有类型与对应类型处理器之间的映射关系
  */
 public final class TypeHandlerRegistry {
 
+  // JDBC类型与对应类型处理器的映射
   private final Map<JdbcType, TypeHandler<?>>  jdbcTypeHandlerMap = new EnumMap<>(JdbcType.class);
+  // java类型与Map<JdbcType, TypeHandler<?>>的映射
   private final Map<Type, Map<JdbcType, TypeHandler<?>>> typeHandlerMap = new ConcurrentHashMap<>();
+  // 未知类型的处理器
   private final TypeHandler<Object> unknownTypeHandler;
+  // 键为typeHandler.getClass(), 值为typeHandler。里面存储了所有的类型处理器
   private final Map<Class<?>, TypeHandler<?>> allTypeHandlersMap = new HashMap<>();
 
+  // 空的，表示java类型没有对应的Map<JdbcType, TypeHandler<?>>
   private static final Map<JdbcType, TypeHandler<?>> NULL_TYPE_HANDLER_MAP = Collections.emptyMap();
 
+  // 默认的枚举类型处理器
   private Class<? extends TypeHandler> defaultEnumTypeHandler = EnumTypeHandler.class;
 
   /**
@@ -229,6 +236,13 @@ public final class TypeHandlerRegistry {
     return getTypeHandler(javaTypeReference.getRawType(), jdbcType);
   }
 
+  /**
+   * 找出一个类型处理器
+   * @param type java类型
+   * @param jdbcType JDBC类型
+   * @return 类型处理器
+   * @param <T> 类型处理器的目标类型
+   */
   @SuppressWarnings("unchecked")
   private <T> TypeHandler<T> getTypeHandler(Type type, JdbcType jdbcType) {
     if (ParamMap.class.equals(type)) {
@@ -239,6 +253,8 @@ public final class TypeHandlerRegistry {
     if (jdbcHandlerMap != null) {
       handler = jdbcHandlerMap.get(jdbcType);
       if (handler == null) {
+        // 使用null找一次，通过本类源码可知道jdbcHandlerMap可能是EnumMap或者HashMap；
+        // EnumMap不允许键位null，因此总是返回null，HashMap 允许null值，这并不是一次无用功
         handler = jdbcHandlerMap.get(null);
       }
       if (handler == null) {

@@ -29,6 +29,7 @@ public class SimpleTypeRegistry {
   private static final Set<Class<?>> SIMPLE_TYPE_SET = new HashSet<>();
 
   static {
+    // 已经将所有的java基本类型维护到SIMPLE_TYPE_SET
     SIMPLE_TYPE_SET.add(String.class);
     SIMPLE_TYPE_SET.add(Byte.class);
     SIMPLE_TYPE_SET.add(Short.class);

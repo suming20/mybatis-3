@@ -34,6 +34,7 @@ import org.apache.ibatis.io.Resources;
 
 /**
  * @author Clinton Begin
+ * 类型别名注册表，内部使用HashMap维护了所有类型的别名和类型的映射关系
  */
 public class TypeAliasRegistry {
 
