@@ -22,6 +22,7 @@ import java.net.URL;
  * A class to wrap access to multiple class loaders making them work as one
  *
  * @author Clinton Begin
+ * 封装了类加载器，从磁盘中获取类文件并加载成类，需要类加载器的支持；
  */
 public class ClassLoaderWrapper {
 
@@ -176,6 +177,7 @@ public class ClassLoaderWrapper {
    * @param classLoader - the group of classloaders to examine
    * @return the class
    * @throws ClassNotFoundException - Remember the wisdom of Judge Smails: Well, the world needs ditch diggers, too.
+   * 使用各种类加载器尝试加载一个类，所有类加载器都失败，则抛出异常；
    */
   Class<?> classForName(String name, ClassLoader[] classLoader) throws ClassNotFoundException {
 
@@ -199,11 +201,12 @@ public class ClassLoaderWrapper {
 
   }
 
+  // 获取所有的类加载器
   ClassLoader[] getClassLoaders(ClassLoader classLoader) {
     return new ClassLoader[]{
-      //参数指定的类加载器
+      //参数指定的类加载器 可能为null
         classLoader,
-      // 系统指定的默认类加载器
+      // 系统指定的默认类加载器 未设置，默认为null
         defaultClassLoader,
       // 当前线程绑定的类加载器
         Thread.currentThread().getContextClassLoader(),

@@ -29,6 +29,7 @@ import org.apache.ibatis.logging.LogFactory;
  * A {@link VFS} implementation that works with the VFS API provided by JBoss 6.
  *
  * @author Ben Gunter
+ * JBoss是一个基于J2EE的开放源代码的应用服务器，JBoss6是 JBoss中的一个版本。JBoss6VFS即为借鉴JBoss6设计的一套 VFS实现类。
  */
 public class JBoss6VFS extends VFS {
   private static final Log log = LogFactory.getLog(JBoss6VFS.class);

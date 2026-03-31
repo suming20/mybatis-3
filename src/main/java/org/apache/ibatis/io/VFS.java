@@ -31,6 +31,7 @@ import org.apache.ibatis.logging.LogFactory;
  * Provides a very simple API for accessing resources within an application server.
  *
  * @author Ben Gunter
+ * 作用是从应用服务器中寻找和读取资源文件，这些资源文件可能是配置文件，类文件等
  */
 public abstract class VFS {
   private static final Log log = LogFactory.getLog(VFS.class);
@@ -40,10 +41,13 @@ public abstract class VFS {
 
   /**
    * The list to which implementations are added by {@link #addImplClass(Class)}.
+   * 存储用户自定义的VSF实现类
    */
   public static final List<Class<? extends VFS>> USER_IMPLEMENTATIONS = new ArrayList<>();
 
-  /** Singleton instance holder. */
+  /** Singleton instance holder.
+   * 静态内部类的方式实现单例模式，懒汉式
+   * */
   private static class VFSHolder {
     static final VFS INSTANCE = createVFS();
 

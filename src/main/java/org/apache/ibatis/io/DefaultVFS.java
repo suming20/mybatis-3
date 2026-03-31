@@ -39,6 +39,7 @@ import org.apache.ibatis.logging.LogFactory;
  * A default implementation of {@link VFS} that works for most application servers.
  *
  * @author Ben Gunter
+ * isValid为true，所有VFS实现类的保底方案，即最后一个验证，但只要验证一定能通过
  */
 public class DefaultVFS extends VFS {
   private static final Log log = LogFactory.getLog(DefaultVFS.class);
@@ -175,6 +176,7 @@ public class DefaultVFS extends VFS {
    * @param path The leading path to match
    * @return The names of all the matching entries
    * @throws IOException If I/O errors occur
+   * 列出给定jar包中符合条件的资源名称
    */
   protected List<String> listResources(JarInputStream jar, String path) throws IOException {
     // Include the leading and trailing slash when matching names
@@ -218,6 +220,7 @@ public class DefaultVFS extends VFS {
    * @return The URL of the JAR file, if one is found. Null if not.
    * @throws MalformedURLException
    *           the malformed URL exception
+   * 找出指定路径上的jar包，返回jar包的准确路径
    */
   protected URL findJarForResource(URL url) throws MalformedURLException {
     if (log.isDebugEnabled()) {
@@ -313,6 +316,7 @@ public class DefaultVFS extends VFS {
    * @param url
    *          The URL of the resource to test.
    * @return true, if is jar
+   * 判断是否是jar包
    */
   protected boolean isJar(URL url) {
     return isJar(url, new byte[JAR_MAGIC.length]);

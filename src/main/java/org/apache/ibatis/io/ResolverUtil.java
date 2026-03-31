@@ -56,6 +56,7 @@ import org.apache.ibatis.logging.LogFactory;
  * @author Tim Fennell
  * @param <T>
  *          the generic type
+ * 工具类，主要完成类的筛选
  */
 public class ResolverUtil<T> {
 
@@ -67,6 +68,7 @@ public class ResolverUtil<T> {
   /**
    * A simple interface that specifies how to test classes to determine if they
    * are to be included in the results produced by the ResolverUtil.
+   * 筛选器
    */
   public interface Test {
 
@@ -77,6 +79,7 @@ public class ResolverUtil<T> {
      * @param type
      *          the type
      * @return true, if successful
+     * 判断指定类是否满足筛选条件
      */
     boolean matches(Class<?> type);
   }
@@ -101,6 +104,7 @@ public class ResolverUtil<T> {
     }
 
     /** Returns true if type is assignable to the parent type supplied in the constructor. */
+    // 判断目标类是否实现了某个接口或者继承了某个类
     @Override
     public boolean matches(Class<?> type) {
       return type != null && parent.isAssignableFrom(type);
@@ -132,6 +136,7 @@ public class ResolverUtil<T> {
     }
 
     /** Returns true if the type is annotated with the class provided to the constructor. */
+    // 判断目标类是否具有某个注解
     @Override
     public boolean matches(Class<?> type) {
       return type != null && type.isAnnotationPresent(annotation);
