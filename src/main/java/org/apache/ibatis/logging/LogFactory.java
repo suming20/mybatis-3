@@ -20,6 +20,10 @@ import java.lang.reflect.Constructor;
 /**
  * @author Clinton Begin
  * @author Eduardo Macarron
+ * Log接口的实现类都是对象适配器（装饰器类除外），最终实际的工作要委托给被适配的目标对象来完成。
+ * 因此是否存在一个可用的目标对象成了适配器能否正常工作的关键所在；
+ * LoggerFactory的工作就是尝试生成各个目标对象；
+ * 如果一个目标对象能够被生成，那改目标对象对应的适配器就是可用的；
  */
 public final class LogFactory {
 
@@ -31,6 +35,7 @@ public final class LogFactory {
   private static Constructor<? extends Log> logConstructor;
 
   static {
+    // 依次执行，尝试生成各个目标对象，最终保底日志方案就是不输出日志；无StdOutImpl类
     tryImplementation(LogFactory::useSlf4jLogging);
     tryImplementation(LogFactory::useCommonsLogging);
     tryImplementation(LogFactory::useLog4J2Logging);

@@ -30,6 +30,7 @@ import org.apache.ibatis.reflection.ExceptionUtil;
  *
  * @author Clinton Begin
  * @author Eduardo Macarron
+ * 实现了InvocationHandler接口，成为一个代理类
  *
  */
 public final class ConnectionLogger extends BaseJdbcLogger implements InvocationHandler {
@@ -45,6 +46,7 @@ public final class ConnectionLogger extends BaseJdbcLogger implements Invocation
   public Object invoke(Object proxy, Method method, Object[] params)
       throws Throwable {
     try {
+      // 获得方法来源，如果方法继承自Object类，则直接交由目标对象来执行
       if (Object.class.equals(method.getDeclaringClass())) {
         return method.invoke(this, params);
       }
@@ -77,6 +79,7 @@ public final class ConnectionLogger extends BaseJdbcLogger implements Invocation
    * @param queryStack
    *          the query stack
    * @return the connection with logging
+   * 生成代理对象
    */
   public static Connection newInstance(Connection conn, Log statementLog, int queryStack) {
     InvocationHandler handler = new ConnectionLogger(conn, statementLog, queryStack);

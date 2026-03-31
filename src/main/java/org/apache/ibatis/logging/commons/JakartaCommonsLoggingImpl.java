@@ -20,9 +20,11 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Clinton Begin
+ * 对象适配器
  */
 public class JakartaCommonsLoggingImpl implements org.apache.ibatis.logging.Log {
 
+  // org.apache.commons.logging.Log 对象
   private final Log log;
 
   public JakartaCommonsLoggingImpl(String clazz) {

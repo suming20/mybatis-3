@@ -37,6 +37,7 @@ import org.apache.ibatis.reflection.ArrayUtil;
  *
  * @author Clinton Begin
  * @author Eduardo Macarron
+ * 基类，提供一个子类使用的基本功能
  */
 public abstract class BaseJdbcLogger {
 
