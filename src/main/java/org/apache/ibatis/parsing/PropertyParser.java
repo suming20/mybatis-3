@@ -20,6 +20,7 @@ import java.util.Properties;
 /**
  * @author Clinton Begin
  * @author Kazuki Shimizu
+ * 属性解析器；相关的类GenericTokenParser-> TokenHandler  VariableTokenHandler
  */
 public class PropertyParser {
 
@@ -50,6 +51,7 @@ public class PropertyParser {
     // Prevent Instantiation
   }
 
+  // 将GenericTokenParser提供的占位符定位功能和TokenHandler提供的字符串功能替换串接在一起
   public static String parse(String string, Properties variables) {
     VariableTokenHandler handler = new VariableTokenHandler(variables);
     GenericTokenParser parser = new GenericTokenParser("${", "}", handler);
@@ -57,8 +59,11 @@ public class PropertyParser {
   }
 
   private static class VariableTokenHandler implements TokenHandler {
+    // 输入的属性变量 properties是HashTable的子类
     private final Properties variables;
+    // 是否启用默认值
     private final boolean enableDefaultValue;
+    // 启用默认值，则表示键和默认值之间的分隔符
     private final String defaultValueSeparator;
 
     private VariableTokenHandler(Properties variables) {
@@ -71,11 +76,18 @@ public class PropertyParser {
       return (variables == null) ? defaultValue : variables.getProperty(key, defaultValue);
     }
 
+    /**
+     * 根据一个字符串，给出另一个字符串；多用在字符串替换等处
+     * 具体实现，会以content作为键，从variable中找出并返回对应的值；支持设置默认值例如content= “key:defaultValue”
+     * @param content 输入的字符串
+     * @return 输出的字符串
+     */
     @Override
     public String handleToken(String content) {
       if (variables != null) {
         String key = content;
         if (enableDefaultValue) {
+          // 启用默认值，则获取默认值
           final int separatorIndex = content.indexOf(defaultValueSeparator);
           String defaultValue = null;
           if (separatorIndex >= 0) {

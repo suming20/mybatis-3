@@ -17,11 +17,15 @@ package org.apache.ibatis.parsing;
 
 /**
  * @author Clinton Begin
+ * 通用的占位符解析器
  */
 public class GenericTokenParser {
 
+  // 起始标志
   private final String openToken;
+  // 结束标志
   private final String closeToken;
+  // 占位符处理器
   private final TokenHandler handler;
 
   public GenericTokenParser(String openToken, String closeToken, TokenHandler handler) {

@@ -43,13 +43,19 @@ import org.xml.sax.SAXParseException;
 /**
  * @author Clinton Begin
  * @author Kazuki Shimizu
+ * 整个XPathParser类本质就是对“javax.xml.xpath.XPath”的封装和调用；
  */
 public class XPathParser {
 
+  // 需要解析的整个XML文档
   private final Document document;
+  // 是否开启验证
   private boolean validation;
+  // 通过EntityResolver可以声明寻找DTD方法的文件，例如通过本地查找，而不是只能通过网络下载DTD文件
   private EntityResolver entityResolver;
+  // mybatis配置文件中properties节点的信息
   private Properties variables;
+  // javax.xml.xpath.XPath工具
   private XPath xpath;
 
   public XPathParser(String xml) {

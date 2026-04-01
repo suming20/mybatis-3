@@ -37,6 +37,7 @@ public class XNode {
   private final String body;
   private final Properties attributes;
   private final Properties variables;
+  // 在一个类中封装自己的解析器，不需要外界的帮助便可以解析自身，即获得了自解析的能力
   private final XPathParser xpathParser;
 
   public XNode(XPathParser xpathParser, Node node, Properties variables) {
