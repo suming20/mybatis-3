@@ -43,10 +43,14 @@ import org.apache.ibatis.session.SqlSession;
  * @author Eduardo Macarron
  * @author Lasse Voss
  * @author Kazuki Shimizu
+ * 表示数据库操作转化后的方法；
+ * 每个MapperMethod对象都对应了一个数据库操作节点，调用MapperMethod实例中的execute方法就可以触发节点中的sql语句
  */
 public class MapperMethod {
 
+  // 内部类，代指一条sql语句
   private final SqlCommand command;
+  // 代指一个具体方法的签名
   private final MethodSignature method;
 
   public MapperMethod(Class<?> mapperInterface, Method method, Configuration config) {
@@ -54,11 +58,18 @@ public class MapperMethod {
     this.method = new MethodSignature(config, mapperInterface, method);
   }
 
+  /**
+   * 执行映射接口中的方法
+   * @param sqlSession sqlSession接口的实例，通过它可以进行数据库的操作
+   * @param args 执行接口方法时传入的参数
+   * @return 数据库操作的结果
+   */
   public Object execute(SqlSession sqlSession, Object[] args) {
     Object result;
     // sqlCommandType判断
     switch (command.getType()) {
       case INSERT: {
+        // 将参数顺序与实参对应好
         Object param = method.convertArgsToSqlCommandParam(args);
         result = rowCountResult(sqlSession.insert(command.getName(), param));
         break;
@@ -203,6 +214,7 @@ public class MapperMethod {
     return result;
   }
 
+  // 用来存储参数，HashMap的子类，比HashMap更加严格；如果试图获取其不存在的键值，它会直接抛出异常
   public static class ParamMap<V> extends HashMap<String, V> {
 
     private static final long serialVersionUID = -2212268410512043556L;
@@ -220,6 +232,7 @@ public class MapperMethod {
   public static class SqlCommand {
 
     private final String name;
+    // 类型  分为6种 增，删，改，查，清缓存，未知
     private final SqlCommandType type;
 
     public SqlCommand(Configuration configuration, Class<?> mapperInterface, Method method) {
@@ -252,14 +265,25 @@ public class MapperMethod {
       return type;
     }
 
+    /**
+     * 找出指定方法对应的MappedStatement对象
+     * @param mapperInterface 映射接口
+     * @param methodName 映射接口中具体操作方法名
+     * @param declaringClass 操作方法所在的类。一般是映射接口本身，也可能是映射接口的子类
+     * @param configuration 配置信息
+     * @return MappedStatement对象 完整的代表了一条sql语句的操作
+     */
     private MappedStatement resolveMappedStatement(Class<?> mapperInterface, String methodName,
         Class<?> declaringClass, Configuration configuration) {
+      // 数据库操作语句的编号是：接口名.方法名
       String statementId = mapperInterface.getName() + "." + methodName;
+      // configuration保存了解析后的所有操作语句，去查找该语句
       if (configuration.hasStatement(statementId)) {
         return configuration.getMappedStatement(statementId);
       } else if (mapperInterface.equals(declaringClass)) {
         return null;
       }
+      // 从方法的定义类开始，沿着父类向上寻找，找到接口类时停止
       for (Class<?> superInterface : mapperInterface.getInterfaces()) {
         if (declaringClass.isAssignableFrom(superInterface)) {
           MappedStatement ms = resolveMappedStatement(superInterface, methodName,
@@ -282,8 +306,11 @@ public class MapperMethod {
     private final boolean returnsOptional;
     private final Class<?> returnType;
     private final String mapKey;
+    // resultHandler参数的位置
     private final Integer resultHandlerIndex;
+    // rowBounds参数的位置
     private final Integer rowBoundsIndex;
+    // 参数名称解析器
     private final ParamNameResolver paramNameResolver;
 
     public MethodSignature(Configuration configuration, Class<?> mapperInterface, Method method) {

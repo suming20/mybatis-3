@@ -33,6 +33,7 @@ import org.apache.ibatis.util.MapUtil;
 /**
  * @author Clinton Begin
  * @author Eduardo Macarron
+ * 动态代理类；当使用它的实例替代被代理对象后，对被代理对象的方法的调用会被转接到MapperProxy中的invoke方法上；
  */
 public class MapperProxy<T> implements InvocationHandler, Serializable {
 
@@ -43,6 +44,7 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
   private static final Method privateLookupInMethod;
   private final SqlSession sqlSession;
   private final Class<T> mapperInterface;
+  // 维护接口方法和MapperMethod的映射关系
   private final Map<Method, MapperMethodInvoker> methodCache;
 
   public MapperProxy(SqlSession sqlSession, Class<T> mapperInterface, Map<Method, MapperMethodInvoker> methodCache) {

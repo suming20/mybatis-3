@@ -25,6 +25,7 @@ import org.apache.ibatis.session.SqlSession;
 
 /**
  * @author Lasse Voss
+ * 其他属性不允许修改，因此产出的MapperProxy对象是唯一的
  */
 public class MapperProxyFactory<T> {
 
