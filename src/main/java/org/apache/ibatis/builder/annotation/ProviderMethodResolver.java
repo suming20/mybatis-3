@@ -46,8 +46,10 @@ public interface ProviderMethodResolver {
    * @param context a context for SQL provider
    * @return an SQL provider method
    * @throws BuilderException Throws when cannot resolve a target method
+   * 作用是：从@Provider注解的type属性所指向的类中找出method属性中所指定的方法
    */
   default Method resolveMethod(ProviderContext context) {
+    // 找出符合方法名的所有方法
     List<Method> sameNameMethods = Arrays.stream(getClass().getMethods())
         .filter(m -> m.getName().equals(context.getMapperMethod().getName()))
         .collect(Collectors.toList());
@@ -55,6 +57,7 @@ public interface ProviderMethodResolver {
       throw new BuilderException("Cannot resolve the provider method because '"
           + context.getMapperMethod().getName() + "' not found in SqlProvider '" + getClass().getName() + "'.");
     }
+    // 根据方法的返回值进行校验
     List<Method> targetMethods = sameNameMethods.stream()
         .filter(m -> CharSequence.class.isAssignableFrom(m.getReturnType()))
         .collect(Collectors.toList());

@@ -164,6 +164,7 @@ public class ProviderSqlSource implements SqlSource {
         int bindParameterCount = providerMethodParameterTypes.length - (providerContext == null ? 0 : 1);
         if (bindParameterCount == 1
             && providerMethodParameterTypes[Integer.valueOf(0).equals(providerContextIndex) ? 1 : 0].isAssignableFrom(parameterObject.getClass())) {
+          // 调用*Provider注解的 type类中的 method方法，从而获得 SQL字符串
           sql = invokeProviderMethod(extractProviderMethodArguments(parameterObject));
         } else {
           @SuppressWarnings("unchecked")
@@ -186,6 +187,7 @@ public class ProviderSqlSource implements SqlSource {
           + "' because SqlProvider method arguments for '" + mapperMethod + "' is an invalid combination.");
       }
       Class<?> parameterType = parameterObject == null ? Object.class : parameterObject.getClass();
+      // 调用languageDriver生成sqlSource对象
       return languageDriver.createSqlSource(configuration, sql, parameterType);
     } catch (BuilderException e) {
       throw e;

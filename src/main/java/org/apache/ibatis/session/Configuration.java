@@ -185,6 +185,7 @@ public class Configuration {
   protected final Collection<XMLStatementBuilder> incompleteStatements = new LinkedList<>();
   protected final Collection<CacheRefResolver> incompleteCacheRefs = new LinkedList<>();
   protected final Collection<ResultMapResolver> incompleteResultMaps = new LinkedList<>();
+  // 存储暂时依赖没有的到解析的对象
   protected final Collection<MethodResolver> incompleteMethods = new LinkedList<>();
 
   /*

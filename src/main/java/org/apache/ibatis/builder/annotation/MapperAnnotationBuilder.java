@@ -93,6 +93,7 @@ import org.apache.ibatis.type.UnknownTypeHandler;
 /**
  * @author Clinton Begin
  * @author Kazuki Shimizu
+ * 注解映射解析
  */
 public class MapperAnnotationBuilder {
 
@@ -114,6 +115,7 @@ public class MapperAnnotationBuilder {
 
   public void parse() {
     String resource = type.toString();
+    // 防止重复分析
     if (!configuration.isResourceLoaded(resource)) {
       loadXmlResource();
       configuration.addLoadedResource(resource);
@@ -138,6 +140,7 @@ public class MapperAnnotationBuilder {
     parsePendingMethods();
   }
 
+  // 排除桥接方法；桥接方法时为了匹配泛型的类型擦除而由编译器自动引入的，并非用户编写的方法，因此要抛出掉；
   private boolean canHaveStatement(Method method) {
     // issue #237
     return !method.isBridge() && !method.isDefault();
@@ -293,6 +296,7 @@ public class MapperAnnotationBuilder {
     return null;
   }
 
+  // 解析该方法，主要是解析该方法上的注解信息
   void parseStatement(Method method) {
     final Class<?> parameterTypeClass = getParameterType(method);
     final LanguageDriver languageDriver = getLanguageDriver(method);
@@ -616,6 +620,7 @@ public class MapperAnnotationBuilder {
 
   private SqlSource buildSqlSource(Annotation annotation, Class<?> parameterType, LanguageDriver languageDriver,
       Method method) {
+    // 直接注解的解析
     if (annotation instanceof Select) {
       return buildSqlSourceFromStrings(((Select) annotation).value(), parameterType, languageDriver);
     } else if (annotation instanceof Update) {

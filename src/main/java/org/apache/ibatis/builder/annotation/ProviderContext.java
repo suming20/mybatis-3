@@ -25,8 +25,11 @@ import java.lang.reflect.Method;
  */
 public final class ProviderContext {
 
+  // 提供映射信息的类
   private final Class<?> mapperType;
+  // 提供映射信息的方法，该方法属于mapperType类
   private final Method mapperMethod;
+  // 数据库编号
   private final String databaseId;
 
   /**
