@@ -35,6 +35,7 @@ import org.apache.ibatis.session.Configuration;
 
 /**
  * @author Clinton Begin
+ * 数据库操作节点的解析
  */
 public class XMLStatementBuilder extends BaseBuilder {
 

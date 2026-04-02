@@ -30,6 +30,7 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 
 /**
  * @author Clinton Begin
+ * 更像一个工具类，为继承它的建造者提供了众多实用的工具方法
  */
 public abstract class BaseBuilder {
   protected final Configuration configuration;

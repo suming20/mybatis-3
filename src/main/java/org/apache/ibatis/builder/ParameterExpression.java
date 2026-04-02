@@ -30,11 +30,13 @@ import java.util.HashMap;
  * </pre>
  *
  * @author Frank D. Martinez [mnesarco]
+ * 属性解析器，用来将描述属性的字符串解析为键值对的形式
  */
 public class ParameterExpression extends HashMap<String, String> {
 
   private static final long serialVersionUID = -2417552199605158680L;
 
+  // 构造方法时解析的入口
   public ParameterExpression(String expression) {
     parse(expression);
   }

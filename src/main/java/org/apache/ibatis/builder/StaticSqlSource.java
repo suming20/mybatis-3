@@ -24,10 +24,12 @@ import org.apache.ibatis.session.Configuration;
 
 /**
  * @author Clinton Begin
+ * SqlSource的4个子实现之一；内部包含的sql语句已经不包含${}和#{}符号了，只有？
  */
 public class StaticSqlSource implements SqlSource {
 
   private final String sql;
+  // sql语句对应的参数列表
   private final List<ParameterMapping> parameterMappings;
   private final Configuration configuration;
 
@@ -41,6 +43,11 @@ public class StaticSqlSource implements SqlSource {
     this.configuration = configuration;
   }
 
+  /**
+   * 组件一个BoundSql对象
+   * @param parameterObject 参数对象
+   * @return 组件的BoundSql对象
+   */
   @Override
   public BoundSql getBoundSql(Object parameterObject) {
     return new BoundSql(configuration, sql, parameterMappings, parameterObject);

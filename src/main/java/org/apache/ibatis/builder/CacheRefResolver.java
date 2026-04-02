@@ -19,9 +19,11 @@ import org.apache.ibatis.cache.Cache;
 
 /**
  * @author Clinton Begin
+ * 用来处理多个命名空间共享缓存的问题
  */
 public class CacheRefResolver {
   private final MapperBuilderAssistant assistant;
+  // 被解析对象，即使用cacheRef的namespace空间
   private final String cacheRefNamespace;
 
   public CacheRefResolver(MapperBuilderAssistant assistant, String cacheRefNamespace) {

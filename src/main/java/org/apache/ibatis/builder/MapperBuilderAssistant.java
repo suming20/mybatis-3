@@ -51,6 +51,7 @@ import org.apache.ibatis.type.TypeHandler;
 
 /**
  * @author Clinton Begin
+ * 本身不是建造者类，而是一个建造者辅助类；继承BaseBuilder类的原因仅仅是因为使用BaseBuilder中的方法
  */
 public class MapperBuilderAssistant extends BaseBuilder {
 
@@ -183,6 +184,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
     id = applyCurrentNamespace(id, false);
     extend = applyCurrentNamespace(extend, true);
 
+    // 解析ResultMap的继承关系
     if (extend != null) {
       if (!configuration.hasResultMap(extend)) {
         throw new IncompleteElementException("Could not find a parent resultmap with id '" + extend + "'");

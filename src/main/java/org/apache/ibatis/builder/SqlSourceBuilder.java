@@ -31,6 +31,7 @@ import org.apache.ibatis.type.JdbcType;
 
 /**
  * @author Clinton Begin
+ * 作用：能够将DynamicSqlSource和RawSqlSource中的${}符号替换掉，从而将它们转换为StaticSqlSource
  */
 public class SqlSourceBuilder extends BaseBuilder {
 

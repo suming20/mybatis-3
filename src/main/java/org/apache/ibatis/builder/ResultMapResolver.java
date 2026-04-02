@@ -23,6 +23,8 @@ import org.apache.ibatis.mapping.ResultMapping;
 
 /**
  * @author Eduardo Macarron
+ * mybatis的resultMap标签支持继承，可以通过设置extends=“xxx"来映射；
+ * resultMap继承关系的解析由ResultMapResolver来完成
  */
 public class ResultMapResolver {
   private final MapperBuilderAssistant assistant;

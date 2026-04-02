@@ -43,8 +43,11 @@ public class XMLIncludeTransformer {
     this.builderAssistant = builderAssistant;
   }
 
+  // 解析数据库操作节点中的include节点
+  // 1,找出目标节点，2，用目标节点替换include节点；3，将目标节点的内容复制到节点前；4，删除目标节点
   public void applyIncludes(Node source) {
     Properties variablesContext = new Properties();
+    // 读取全局配置信息
     Properties configurationVariables = configuration.getVariables();
     Optional.ofNullable(configurationVariables).ifPresent(variablesContext::putAll);
     applyIncludes(source, variablesContext, false);
