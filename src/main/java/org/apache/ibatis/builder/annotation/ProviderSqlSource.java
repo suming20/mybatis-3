@@ -32,6 +32,7 @@ import org.apache.ibatis.session.Configuration;
 /**
  * @author Clinton Begin
  * @author Kazuki Shimizu
+ * 通过注解映射形式获取的SQL语句
  */
 public class ProviderSqlSource implements SqlSource {
 

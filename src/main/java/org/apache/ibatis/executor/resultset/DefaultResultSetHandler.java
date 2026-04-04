@@ -876,16 +876,26 @@ public class DefaultResultSetHandler implements ResultSetHandler {
   // DISCRIMINATOR
   //
 
+  /**
+   * 应用鉴别器
+   * @param rs 数据库查询出的结果集
+   * @param resultMap 当前的ResultMap对象
+   * @param columnPrefix 属性的父级前缀
+   * @return 已经不包含鉴别器的新的ResultMap对象
+   */
   public ResultMap resolveDiscriminatedResultMap(ResultSet rs, ResultMap resultMap, String columnPrefix) throws SQLException {
     Set<String> pastDiscriminators = new HashSet<>();
     Discriminator discriminator = resultMap.getDiscriminator();
     while (discriminator != null) {
+      // 求解条件判断的结果，这个结果值就是鉴别器鉴别的依据
       final Object value = getDiscriminatorValue(rs, discriminator, columnPrefix);
+      // 根据真实值判断属于哪个分支
       final String discriminatedMapId = discriminator.getMapIdFor(String.valueOf(value));
       if (configuration.hasResultMap(discriminatedMapId)) {
         resultMap = configuration.getResultMap(discriminatedMapId);
         Discriminator lastDiscriminator = discriminator;
         discriminator = resultMap.getDiscriminator();
+        // 判断鉴别器是否出现了环
         if (discriminator == lastDiscriminator || !pastDiscriminators.add(discriminatedMapId)) {
           break;
         }

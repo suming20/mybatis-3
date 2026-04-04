@@ -31,6 +31,7 @@ import org.apache.ibatis.session.Configuration;
  *
  * @since 3.2.0
  * @author Eduardo Macarron
+ * 原生SQL语句，语句中含有#{} 占位符，但不含有动态SQL节点，也不含有${} 占位符；
  */
 public class RawSqlSource implements SqlSource {
 

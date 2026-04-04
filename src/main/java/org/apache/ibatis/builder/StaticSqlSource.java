@@ -25,6 +25,7 @@ import org.apache.ibatis.session.Configuration;
 /**
  * @author Clinton Begin
  * SqlSource的4个子实现之一；内部包含的sql语句已经不包含${}和#{}符号了，只有？
+ * 静态语句，含有? 可以直接提供交给数据执行；
  */
 public class StaticSqlSource implements SqlSource {
 

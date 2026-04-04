@@ -33,6 +33,7 @@ import org.apache.ibatis.session.Configuration;
 
 /**
  * @author Clinton Begin
+ * resultMap节点对应的实体类
  */
 public class ResultMap {
   private Configuration configuration;

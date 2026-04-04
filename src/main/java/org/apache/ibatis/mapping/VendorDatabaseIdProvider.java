@@ -54,11 +54,14 @@ public class VendorDatabaseIdProvider implements DatabaseIdProvider {
     return null;
   }
 
+  // 将MyBatis配置文件中设置在databaseIdProvider节点中的信息写入VendorDatabaseIdProvider对象，这些信息实际上是数据库的别名信息
   @Override
   public void setProperties(Properties p) {
     this.properties = p;
   }
 
+  // 首先是获取当前数据源的类型，然后是将数据源类型映射为我们在databaseIdProvider节点中设置的别名。
+  // 这样，在需要执行 SQL语句时，就可以根据数据库操作节点中的databaseId设置对 SQL语句进行筛选。
   private String getDatabaseName(DataSource dataSource) throws SQLException {
     String productName = getDatabaseProductName(dataSource);
     if (this.properties != null) {

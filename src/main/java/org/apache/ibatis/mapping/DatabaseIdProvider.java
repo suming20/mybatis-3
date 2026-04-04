@@ -26,6 +26,7 @@ import javax.sql.DataSource;
  * This mechanism enables supporting multiple vendors or versions
  *
  * @author Eduardo Macarron
+ * 多数据支持的实现
  */
 public interface DatabaseIdProvider {
 

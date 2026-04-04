@@ -22,6 +22,7 @@ import org.apache.ibatis.session.Configuration;
 
 /**
  * @author Clinton Begin
+ * 动态SQL语句，所谓的动态是指含有动态节点的（如if节点）或者含有${} 占位符的语句
  */
 public class DynamicSqlSource implements SqlSource {
 

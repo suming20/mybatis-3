@@ -49,6 +49,7 @@ public class ResultMapping {
   ResultMapping() {
   }
 
+  // 构建者模式
   public static class Builder {
     private ResultMapping resultMapping = new ResultMapping();
 

@@ -22,6 +22,7 @@ import org.apache.ibatis.session.Configuration;
 
 /**
  * @author Clinton Begin
+ * resultMap内部的鉴别器，就像程序中的选择语句一样，它使得数据查询结果能够根据某些条件的不同而进行不同的映射；
  */
 public class Discriminator {
 

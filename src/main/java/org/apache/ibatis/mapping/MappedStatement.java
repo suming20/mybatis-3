@@ -30,6 +30,8 @@ import org.apache.ibatis.session.Configuration;
 
 /**
  * @author Clinton Begin
+ * 数据库操作节点（select， update，insert，delete）内的所有内容
+ * 解析实体类
  */
 public final class MappedStatement {
 
