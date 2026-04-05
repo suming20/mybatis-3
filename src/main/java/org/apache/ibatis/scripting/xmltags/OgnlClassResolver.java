@@ -27,6 +27,7 @@ import org.apache.ibatis.io.Resources;
  * @author Daniel Guggi
  *
  * @see <a href='https://github.com/mybatis/mybatis-3/issues/161'>Issue 161</a>
+ * OGNL可以通过该类进行类的读取，即将类名转化为一个类
  */
 public class OgnlClassResolver extends DefaultClassResolver {
 

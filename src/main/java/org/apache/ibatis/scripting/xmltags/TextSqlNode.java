@@ -24,6 +24,7 @@ import org.apache.ibatis.type.SimpleTypeRegistry;
 
 /**
  * @author Clinton Begin
+ * 替换掉其中的"${}"占位符
  */
 public class TextSqlNode implements SqlNode {
   private final String text;
@@ -66,6 +67,7 @@ public class TextSqlNode implements SqlNode {
       this.injectionFilter = injectionFilter;
     }
 
+    // 该对象的 handleToken方法会取出占位符中的变量，然后使用该变量作为键去上下文环境中寻找对应的值
     @Override
     public String handleToken(String content) {
       Object parameter = context.getBindings().get("_parameter");
@@ -99,6 +101,7 @@ public class TextSqlNode implements SqlNode {
       return isDynamic;
     }
 
+    // 该对象的handleToken 方法会置位成员属性isDynamic，可以记录自身是否遇到过占位符
     @Override
     public String handleToken(String content) {
       this.isDynamic = true;

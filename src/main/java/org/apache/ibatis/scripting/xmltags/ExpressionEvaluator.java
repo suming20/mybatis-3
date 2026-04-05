@@ -38,7 +38,7 @@ public class ExpressionEvaluator {
     }
     return value != null;
   }
-
+  // 对结果为迭代器形式的表达式进行求值
   public Iterable<?> evaluateIterable(String expression, Object parameterObject) {
     Object value = OgnlCache.getValue(expression, parameterObject);
     if (value == null) {

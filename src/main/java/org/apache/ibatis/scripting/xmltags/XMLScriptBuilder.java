@@ -31,6 +31,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * @author Clinton Begin
+ * 负责SQL节点树的组成
  */
 public class XMLScriptBuilder extends BaseBuilder {
 
@@ -116,6 +117,7 @@ public class XMLScriptBuilder extends BaseBuilder {
         isDynamic = true;
       }
     }
+
     return new MixedSqlNode(contents);
   }
 

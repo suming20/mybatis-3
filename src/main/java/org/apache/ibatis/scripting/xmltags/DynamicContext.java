@@ -38,8 +38,11 @@ public class DynamicContext {
     OgnlRuntime.setPropertyAccessor(ContextMap.class, new ContextAccessor());
   }
 
+  // 保存了SQL节点树解析时的上下文环境
   private final ContextMap bindings;
+  // 用来存储解析结束的SQL片段
   private final StringJoiner sqlBuilder = new StringJoiner(" ");
+  // 解析时的编号，防止解析混乱
   private int uniqueNumber = 0;
 
   public DynamicContext(Configuration configuration, Object parameterObject) {

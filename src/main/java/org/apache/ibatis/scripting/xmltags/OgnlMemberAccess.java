@@ -33,6 +33,8 @@ import org.apache.ibatis.reflection.Reflector;
  * @see <a href=
  *      'https://github.com/jkuhnert/ognl/blob/OGNL_3_2_1/src/java/ognl/DefaultMemberAccess.java'>DefaultMemberAccess</a>
  * @see <a href='https://github.com/jkuhnert/ognl/issues/47'>#47 of ognl</a>
+ * OGNL提供的一个钩子接口；OGNL借助这个接口为访问对象的属性做好准备；
+ * 基于反射提供了修改对象属性可访问性的功能
  */
 class OgnlMemberAccess implements MemberAccess {
 
@@ -42,6 +44,14 @@ class OgnlMemberAccess implements MemberAccess {
     this.canControlMemberAccessible = Reflector.canControlMemberAccessible();
   }
 
+  /**
+   * 设置对象的可访问属性
+   * @param context 环境上下文
+   * @param target 目标对象
+   * @param member 目标对象的目标成员
+   * @param propertyName 属性的名称
+   * @return 属性的可访问性
+   */
   @Override
   public Object setup(Map context, Object target, Member member, String propertyName) {
     Object result = null;

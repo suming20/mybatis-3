@@ -84,6 +84,7 @@ public class ForEachSqlNode implements SqlNode {
       i++;
     }
     applyClose(context);
+    // 清理此次操作对环境的影响
     context.getBindings().remove(item);
     context.getBindings().remove(index);
     return true;

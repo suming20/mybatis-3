@@ -19,5 +19,6 @@ package org.apache.ibatis.scripting.xmltags;
  * @author Clinton Begin
  */
 public interface SqlNode {
+  // 负责完成自身节点的解析，并将解析结果合并到输入参数提供的上下文环境中
   boolean apply(DynamicContext context);
 }
