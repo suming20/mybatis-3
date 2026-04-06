@@ -28,6 +28,10 @@ import org.apache.ibatis.datasource.DataSourceFactory;
 
 /**
  * @author Clinton Begin
+ * JNDI：java命名和目录接口；可以理解为命名规范；
+ * 在使用该规范为资源命名并将资源放入环境Context中后，可以通过名称从环境中查找lookup对应的资源；
+ * 数据源作为一个资源，就可以使用 JNDI命名后放入环境中，这就是 JNDI数据源
+ * 本质上，JndiDataSourceFactory不是在生产数据源，而只是负责查找数据源；
  */
 public class JndiDataSourceFactory implements DataSourceFactory {
 

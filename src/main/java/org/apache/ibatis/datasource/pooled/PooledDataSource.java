@@ -40,6 +40,7 @@ public class PooledDataSource implements DataSource {
 
   private static final Log log = LogFactory.getLog(PooledDataSource.class);
 
+  // 存储所有数据库连接，及其状态信息
   private final PoolState state = new PoolState(this);
 
   private final UnpooledDataSource dataSource;
@@ -54,6 +55,7 @@ public class PooledDataSource implements DataSource {
   protected boolean poolPingEnabled;
   protected int poolPingConnectionsNotUsedFor;
 
+  // 存储的是该数据源连接类型编码：目的是确保池中的每个连接都是等价的
   private int expectedConnectionTypeCode;
 
   public PooledDataSource() {
@@ -326,6 +328,8 @@ public class PooledDataSource implements DataSource {
 
   /**
    * Closes all active and idle connections in the pool.
+   * 更改数据库的driver，username，password中的一个或者多个属性，都会调用此方法；保证连接池中不会出现两批PooledConnection对象的情况
+   * 会将所有空闲连接和活动连接全部关闭
    */
   public void forceCloseAll() {
     synchronized (state) {
@@ -419,6 +423,7 @@ public class PooledDataSource implements DataSource {
 
     while (conn == null) {
       synchronized (state) {
+        // 存在空闲连接
         if (!state.idleConnections.isEmpty()) {
           // Pool has available connection
           conn = state.idleConnections.remove(0);

@@ -20,6 +20,7 @@ import java.util.List;
 
 /**
  * @author Clinton Begin
+ * 连接池运行期数据的统计对象，便于监控连接池的运行状态，可以及时调整连接池配置，以便更好的服务于业务
  */
 public class PoolState {
 

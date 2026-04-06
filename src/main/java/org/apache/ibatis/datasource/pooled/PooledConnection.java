@@ -25,6 +25,7 @@ import org.apache.ibatis.reflection.ExceptionUtil;
 
 /**
  * @author Clinton Begin
+ * 是普通Collection的代理类，重要工作：修改Collection类的close方法的行为
  */
 class PooledConnection implements InvocationHandler {
 

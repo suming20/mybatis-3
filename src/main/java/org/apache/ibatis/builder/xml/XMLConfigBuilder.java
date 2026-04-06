@@ -351,11 +351,21 @@ public class XMLConfigBuilder extends BaseBuilder {
     throw new BuilderException("Environment declaration requires a TransactionFactory.");
   }
 
+  /**
+   * 解析配置信息，获取数据源工厂
+   * <dataSource type= "POOLED">
+   *   <property name="Driver" value="${dataSoruce.driver}"/>
+   *   ...
+   *   </dataSource>
+   * @param context 被解析的节点
+   * @return 数据源工厂
+   */
   private DataSourceFactory dataSourceElement(XNode context) throws Exception {
     if (context != null) {
+      // 判断数据源类型 POOLED UNPOOLED JNDI
       String type = context.getStringAttribute("type");
       Properties props = context.getChildrenAsProperties();
-      // 根据别名找到具体的类型 POOLED
+      // 根据dataSource的type找到具体的工厂
       DataSourceFactory factory = (DataSourceFactory) resolveClass(type).getDeclaredConstructor().newInstance();
       factory.setProperties(props);
       return factory;
