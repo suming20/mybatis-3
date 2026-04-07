@@ -34,14 +34,18 @@ import org.apache.ibatis.logging.LogFactory;
  *
  * @author Clinton Begin
  * @author Eduardo Macarron
+ * 事务缓存
  */
 public class TransactionalCache implements Cache {
 
   private static final Log log = LogFactory.getLog(TransactionalCache.class);
 
   private final Cache delegate;
+  // 事务提交后是否直接清理缓存
   private boolean clearOnCommit;
+  // 将事务中产生的数据暂时保存起来，在事务提交时一并提交给缓存，而在事务回滚时直接销毁
   private final Map<Object, Object> entriesToAddOnCommit;
+  // 缓存查询未命中的数据
   private final Set<Object> entriesMissedInCache;
 
   public TransactionalCache(Cache delegate) {

@@ -27,10 +27,13 @@ import org.apache.ibatis.cache.Cache;
  * Thanks to Dr. Heinz Kabutz for his guidance here.
  *
  * @author Clinton Begin
+ * 包装成弱引用，从而使得JVM可以清理掉缓存数据
  */
 public class WeakCache implements Cache {
   private final Deque<Object> hardLinksToAvoidGarbageCollection;
+  // 弱引用的对象列表
   private final ReferenceQueue<Object> queueOfGarbageCollectedEntries;
+  // 被装饰的对象
   private final Cache delegate;
   private int numberOfHardLinks;
 
@@ -105,6 +108,7 @@ public class WeakCache implements Cache {
     }
   }
 
+  // WeakEntry类作为弱引用包装类直接增加了key属性并在其中保存了数据的键，而这个属性是强引用的，不会被 JVM随意清理掉。
   private static class WeakEntry extends WeakReference<Object> {
     private final Object key;
 

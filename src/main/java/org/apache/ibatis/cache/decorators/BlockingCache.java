@@ -33,6 +33,7 @@ import org.apache.ibatis.cache.CacheException;
  *
  * @author Eduardo Macarron
  *
+ * 在使用阻塞装饰器装饰缓存后，缓存在收到多条相同的查询请求时会暂时阻塞住后面的查询，等待数据库结果返回时将所有的请求一并返回。
  */
 public class BlockingCache implements Cache {
 

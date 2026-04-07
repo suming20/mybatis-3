@@ -36,6 +36,7 @@ import org.apache.ibatis.reflection.SystemMetaObject;
 
 /**
  * @author Clinton Begin
+ * 缓存的组件
  */
 public class CacheBuilder {
   private final String id;
@@ -90,7 +91,9 @@ public class CacheBuilder {
   }
 
   public Cache build() {
+    // 设置缓存的默认实现，默认装饰器（仅设置，并未装配）
     setDefaultImplementations();
+    // 创建默认的缓存
     Cache cache = newBaseCacheInstance(implementation, id);
     setCacheProperties(cache);
     // issue #352, do not apply decorators to custom caches
@@ -110,11 +113,13 @@ public class CacheBuilder {
     if (implementation == null) {
       implementation = PerpetualCache.class;
       if (decorators.isEmpty()) {
+        // 默认装饰器LruCache
         decorators.add(LruCache.class);
       }
     }
   }
 
+  // 增加缓存的过程，就是增加装饰器的过程
   private Cache setStandardDecorators(Cache cache) {
     try {
       MetaObject metaCache = SystemMetaObject.forObject(cache);
