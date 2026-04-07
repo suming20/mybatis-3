@@ -34,6 +34,8 @@ import java.util.regex.Pattern;
  * please make and modify your own copy instead of sending us an enhancement request.<br>
  *
  * @author Clinton Begin
+ * mybatis提供的直接执行SQL脚本的工具类，开发者可以直接将整个脚本文件提交给mybatis执行
+ * 不涉及变量赋值问题，提供了全脚本执行和逐行执行两种模式
  */
 public class ScriptRunner {
 
@@ -114,8 +116,10 @@ public class ScriptRunner {
 
     try {
       if (sendFullScript) {
+        // 全脚本执行
         executeFullScript(reader);
       } else {
+        // 逐行执行
         executeLineByLine(reader);
       }
     } finally {

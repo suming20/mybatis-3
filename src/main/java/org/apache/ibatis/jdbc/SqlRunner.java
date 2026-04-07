@@ -34,6 +34,8 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 
 /**
  * @author Clinton Begin
+ * mybatis提供的可以直接执行SQL语句的工具类
+ * 注意点：如果参数为null，则需要引用枚举类型中null的枚举值；因为枚举值中包含了类型信息和类型处理器信息
  */
 public class SqlRunner {
 
@@ -202,6 +204,7 @@ public class SqlRunner {
     }
   }
 
+  // 负责将数据库操作的结果提取出来，用列表的形式返回
   private List<Map<String, Object>> getResults(ResultSet rs) throws SQLException {
     List<Map<String, Object>> list = new ArrayList<>();
     List<String> columns = new ArrayList<>();
@@ -217,9 +220,11 @@ public class SqlRunner {
         }
         typeHandlers.add(typeHandler);
       } catch (Exception e) {
+        // 默认的类型处理器是Object处理器
         typeHandlers.add(typeHandlerRegistry.getTypeHandler(Object.class));
       }
     }
+    // 循环处理结果
     while (rs.next()) {
       Map<String, Object> row = new HashMap<>();
       for (int i = 0, n = columns.size(); i < n; i++) {

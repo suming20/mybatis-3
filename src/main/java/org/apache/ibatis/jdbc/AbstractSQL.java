@@ -26,6 +26,7 @@ import java.util.List;
  * @author Jeff Butler
  * @author Adam Gent
  * @author Kazuki Shimizu
+ * 内部含有SQLStatement和SafeAppendable两个内部类
  */
 public abstract class AbstractSQL<T> {
 
@@ -470,6 +471,7 @@ public abstract class AbstractSQL<T> {
     return sb.toString();
   }
 
+  // 拼接器
   private static class SafeAppendable {
     private final Appendable appendable;
     private boolean empty = true;
@@ -497,6 +499,7 @@ public abstract class AbstractSQL<T> {
 
   }
 
+  // 内部类可以完整的表述出一条SQL语句
   private static class SQLStatement {
 
     public enum StatementType {
