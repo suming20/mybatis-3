@@ -24,6 +24,7 @@ import java.io.Closeable;
  * using the id columns of the resultMap.
  *
  * @author Guillaume Darmont / guillaume@dropinocean.com
+ * Iterable接口表征一个类是可迭代的，Iterator接口表征一个类是迭代器
  */
 public interface Cursor<T> extends Closeable, Iterable<T> {
 
@@ -35,6 +36,7 @@ public interface Cursor<T> extends Closeable, Iterable<T> {
   /**
    *
    * @return true if the cursor is fully consumed and has returned all elements matching the query.
+   * 是否已完成了所有的遍历
    */
   boolean isConsumed();
 

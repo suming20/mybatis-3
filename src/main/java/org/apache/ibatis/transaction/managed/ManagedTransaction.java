@@ -63,6 +63,7 @@ public class ManagedTransaction implements Transaction {
     return this.connection;
   }
 
+  // 方法内部无逻辑，相关的事务操作都委托给容器进行事务管理
   @Override
   public void commit() throws SQLException {
     // Does nothing

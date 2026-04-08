@@ -38,33 +38,45 @@ public class DefaultCursor<T> implements Cursor<T> {
 
   // ResultSetHandler stuff
   private final DefaultResultSetHandler resultSetHandler;
+  // 该结果集对应的ResultMap信息来源于Mapper中的ResultMap节点
   private final ResultMap resultMap;
+  // 返回结果的详细信息
   private final ResultSetWrapper rsw;
+  // 结果的起止信息
   private final RowBounds rowBounds;
+  // resultHander的子类，起到暂存结果的作用
   protected final ObjectWrapperResultHandler<T> objectWrapperResultHandler = new ObjectWrapperResultHandler<>();
 
+  // 内部迭代器
   private final CursorIterator cursorIterator = new CursorIterator();
+  // 迭代器存在标志位
   private boolean iteratorRetrieved;
 
+  // 游标状态
   private CursorStatus status = CursorStatus.CREATED;
+  // 记录已经映射的行
   private int indexWithRowBound = -1;
 
   private enum CursorStatus {
 
     /**
      * A freshly created cursor, database ResultSet consuming has not started.
+     * 新创建的游标，结果集尚未消费
      */
     CREATED,
     /**
      * A cursor currently in use, database ResultSet consuming has started.
+     * 游标正在被使用，结果集正在被消费
      */
     OPEN,
     /**
      * A closed cursor, not fully consumed.
+     * 游标已被关闭，但其中的结果尚未完全消费
      */
     CLOSED,
     /**
      * A fully consumed cursor, a consumed cursor is always closed.
+     * 游标已被关闭，其中的结果已被完全消费
      */
     CONSUMED
   }
@@ -93,6 +105,7 @@ public class DefaultCursor<T> implements Cursor<T> {
 
   @Override
   public Iterator<T> iterator() {
+    // 使用IteratorRetried变量保证了迭代器只能给出一次，防止多次给出造成的访问混乱
     if (iteratorRetrieved) {
       throw new IllegalStateException("Cannot open more than one iterator on a Cursor");
     }
@@ -121,14 +134,17 @@ public class DefaultCursor<T> implements Cursor<T> {
     }
   }
 
+  // 考虑了查询结果时的边界限制
   protected T fetchNextUsingRowBound() {
     T result = fetchNextObjectFromDatabase();
     while (objectWrapperResultHandler.fetched && indexWithRowBound < rowBounds.getOffset()) {
+      // 如果对象存在但不满足边界限制，则持续读取数据库结果中的下一个，直到边界起始位置
       result = fetchNextObjectFromDatabase();
     }
     return result;
   }
 
+  // 每次调用时都会从数据库查询返回的结果中取出一条结果，并非真正的查询数据
   protected T fetchNextObjectFromDatabase() {
     if (isClosed()) {
       return null;
