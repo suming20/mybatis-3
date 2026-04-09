@@ -46,6 +46,7 @@ import org.apache.ibatis.util.MapUtil;
 /**
  * @author Clinton Begin
  * @author Kazuki Shimizu
+ * 是为具有主键自增功能的数据库准备的：提供自增主键的回写功能，将数据库中产生的id回写给java对象本身；
  */
 public class Jdbc3KeyGenerator implements KeyGenerator {
 
@@ -76,6 +77,7 @@ public class Jdbc3KeyGenerator implements KeyGenerator {
     if (keyProperties == null || keyProperties.length == 0) {
       return;
     }
+    // Statement对象的 getGeneratedKeys方法能返回此语句操作自增生成的主键，如果此语句没有产生自增主键，则结果为空 ResultSet对象
     try (ResultSet rs = stmt.getGeneratedKeys()) {
       final ResultSetMetaData rsmd = rs.getMetaData();
       final Configuration configuration = ms.getConfiguration();
