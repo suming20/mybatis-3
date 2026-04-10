@@ -96,6 +96,7 @@ public class SimpleStatementHandler extends BaseStatementHandler {
   @Override
   public void parameterize(Statement statement) {
     // N/A
+    // 实现为空，因为只需要完成字符串的替换，不需要进行参数处理
   }
 
 }

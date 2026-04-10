@@ -38,6 +38,7 @@ import org.apache.ibatis.type.UnknownTypeHandler;
 
 /**
  * @author Iwao AVE!
+ * 对java.sql.ResultSet的进一步封装，扩展出更多的功能
  */
 public class ResultSetWrapper {
 

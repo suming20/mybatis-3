@@ -32,6 +32,7 @@ import org.apache.ibatis.session.RowBounds;
 /**
  * @author Clinton Begin
  * 路由语句处理器，装饰类对象，delegate（为其他statementhandler)
+ * 能够根据传入的MappedStatement对象具体类型中选择一个具体的被代理对象，将实际的操作委托给被代理对象；路由功能
  */
 public class RoutingStatementHandler implements StatementHandler {
 

@@ -38,10 +38,13 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
  */
 public class DefaultParameterHandler implements ParameterHandler {
 
+  // 类型处理器注册表
   private final TypeHandlerRegistry typeHandlerRegistry;
 
+  // 包含完整增，删，该，查节点信息
   private final MappedStatement mappedStatement;
   private final Object parameterObject;
+  // 包含SQL语句，参数，实参信息
   private final BoundSql boundSql;
   private final Configuration configuration;
 

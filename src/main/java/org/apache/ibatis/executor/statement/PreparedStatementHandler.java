@@ -93,6 +93,7 @@ public class PreparedStatementHandler extends BaseStatementHandler {
 
   @Override
   public void parameterize(Statement statement) throws SQLException {
+    // 最终通过 ParameterHandler接口经过多级中转后调用了java.sql.PreparedStatement类中的参数赋值方法。
     parameterHandler.setParameters((PreparedStatement) statement);
   }
 
