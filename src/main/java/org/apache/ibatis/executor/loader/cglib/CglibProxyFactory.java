@@ -44,7 +44,9 @@ import org.apache.ibatis.session.Configuration;
  */
 public class CglibProxyFactory implements ProxyFactory {
 
+  // 在JVM在进行垃圾回收前，允许使用finalize方法在垃圾收集器将对象从内存中清理之前做必要的清理工作
   private static final String FINALIZE_METHOD = "finalize";
+  // 序列化之前做必要的处理
   private static final String WRITE_REPLACE_METHOD = "writeReplace";
 
   public CglibProxyFactory() {
@@ -93,10 +95,14 @@ public class CglibProxyFactory implements ProxyFactory {
   private static class EnhancedResultObjectProxyImpl implements MethodInterceptor {
 
     private final Class<?> type;
+    // 要懒加载的属性map
     private final ResultLoaderMap lazyLoader;
+    // 是否激进懒加载
     private final boolean aggressive;
+    // 能够触发全局懒加载的方法名为 equals clone hashCode toString；这4个方法名在Configuration中被初始化
     private final Set<String> lazyLoadTriggerMethods;
     private final ObjectFactory objectFactory;
+    // 被代理类构造函数的参数类型列表
     private final List<Class<?>> constructorArgTypes;
     private final List<Object> constructorArgs;
 
@@ -118,6 +124,13 @@ public class CglibProxyFactory implements ProxyFactory {
       return enhanced;
     }
 
+    /**
+     * 代理类的拦截方法
+     * @param enhanced 代理对象本身
+     * @param method 被调用的方法
+     * @param args 被调用的方法参数
+     * @param methodProxy 用来调用父类的代理
+     */
     @Override
     public Object intercept(Object enhanced, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
       final String methodName = method.getName();
@@ -130,8 +143,10 @@ public class CglibProxyFactory implements ProxyFactory {
             } else {
               original = objectFactory.create(type, constructorArgTypes, constructorArgs);
             }
+            // 将被代理对象的属性拷贝到新创建的对象
             PropertyCopier.copyBeanProperties(type, enhanced, original);
             if (lazyLoader.size() > 0) {
+              // 存在懒加载属性
               return new CglibSerialStateHolder(original, lazyLoader.getProperties(), objectFactory, constructorArgTypes, constructorArgs);
             } else {
               return original;
@@ -139,11 +154,14 @@ public class CglibProxyFactory implements ProxyFactory {
           } else {
             if (lazyLoader.size() > 0 && !FINALIZE_METHOD.equals(methodName)) {
               if (aggressive || lazyLoadTriggerMethods.contains(methodName)) {
+                // 完成所有属性的懒加载
                 lazyLoader.loadAll();
               } else if (PropertyNamer.isSetter(methodName)) {
+                // 调用了属性的写方法，则先清除该属性的懒加载设置，该属性不需要被懒加载了
                 final String property = PropertyNamer.methodToProperty(methodName);
                 lazyLoader.remove(property);
               } else if (PropertyNamer.isGetter(methodName)) {
+                // 调用属性的读方法，如果该属性是尚未加载的懒加载属性，则进行懒加载
                 final String property = PropertyNamer.methodToProperty(methodName);
                 if (lazyLoader.hasLoader(property)) {
                   lazyLoader.load(property);

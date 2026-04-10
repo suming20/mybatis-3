@@ -42,8 +42,11 @@ public abstract class AbstractSerialStateHolder implements Externalizable {
 
   private static final long serialVersionUID = 8940388717901644661L;
   private static final ThreadLocal<ObjectOutputStream> stream = new ThreadLocal<>();
+  // 序列化后的对象
   private byte[] userBeanBytes = new byte[0];
+  // 原对象
   private Object userBean;
+  // 未加载的属性
   private Map<String, ResultLoaderMap.LoadPair> unloadedProperties;
   private ObjectFactory objectFactory;
   private Class<?>[] constructorArgTypes;
@@ -103,6 +106,7 @@ public abstract class AbstractSerialStateHolder implements Externalizable {
   @SuppressWarnings("unchecked")
   protected final Object readResolve() throws ObjectStreamException {
     /* Second run */
+    // 非第一次运行，直接输出已经解析好的被代理对象
     if (this.userBean != null && this.userBeanBytes.length == 0) {
       return this.userBean;
     }
@@ -110,6 +114,7 @@ public abstract class AbstractSerialStateHolder implements Externalizable {
     SerialFilterChecker.check();
 
     /* First run */
+    // 第一次运行，反序列化输出
     try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(this.userBeanBytes))) {
       this.userBean = in.readObject();
       this.unloadedProperties = (Map<String, ResultLoaderMap.LoadPair>) in.readObject();
@@ -126,6 +131,7 @@ public abstract class AbstractSerialStateHolder implements Externalizable {
     final List<Class<?>> arrayTypes = Arrays.asList(this.constructorArgTypes);
     final List<Object> arrayValues = Arrays.asList(this.constructorArgs);
 
+    // 创建一个反序列化的代理输出，是EnhancedDeserializationProxyImpl对象
     return this.createDeserializationProxy(userBean, arrayProps, objectFactory, arrayTypes, arrayValues);
   }
 

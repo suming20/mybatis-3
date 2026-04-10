@@ -109,18 +109,22 @@ public class ResultLoaderMap {
     private static final long serialVersionUID = 20130412;
     /**
      * Name of factory method which returns database connection.
+     * 用来根据反射得到数据库连接的方法名
      */
     private static final String FACTORY_METHOD = "getConfiguration";
     /**
      * Object to check whether we went through serialization..
+     * 判断是否经过了序列化的标志位，因为该属性被设置了transient，经过一次序列化和反序列化后会变为null
      */
     private final transient Object serializationCheck = new Object();
     /**
      * Meta object which sets loaded properties.
+     * 数据结果对象的封装
      */
     private transient MetaObject metaResultObject;
     /**
      * Result loader which loads unread properties.
+     * 用以加载未加载属性的加载器
      */
     private transient ResultLoader resultLoader;
     /**
@@ -133,6 +137,7 @@ public class ResultLoaderMap {
     private Class<?> configurationFactory;
     /**
      * Name of the unread property.
+     * 设置未加载的属性名
      */
     private String property;
     /**
@@ -184,6 +189,8 @@ public class ResultLoaderMap {
       this.load(null);
     }
 
+    // userObject需要被加载的对象（只有当this.metaResultObject == null || this.resultLoader == null时才生效，
+    // 否则会采用属性 metaResultObject相应的对象
     public void load(final Object userObject) throws SQLException {
       if (this.metaResultObject == null || this.resultLoader == null) {
         if (this.mappedParameter == null) {
@@ -209,6 +216,7 @@ public class ResultLoaderMap {
       /* We are using a new executor because we may be (and likely are) on a new thread
        * and executors aren't thread safe. (Is this sufficient?)
        *
+       * 只要经历过持久化，就可能在别的线程中了；为这次懒加载创建的新线程resultLoader
        * A better approach would be making executors thread safe. */
       if (this.serializationCheck == null) {
         final ResultLoader old = this.resultLoader;
@@ -279,6 +287,8 @@ public class ResultLoaderMap {
     }
   }
 
+  // 存在的目的是通过isClosed方法返回一个true来表明自己是一个关闭的类，
+  // 以保证让任何遇到ClosedExecutor对象的操作都会重新创建一个新的有实际功能的Executor
   private static final class ClosedExecutor extends BaseExecutor {
 
     public ClosedExecutor() {
