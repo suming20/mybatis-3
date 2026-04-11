@@ -38,6 +38,7 @@ class PluginTest {
     assertNotEquals("Always", map.toString());
   }
 
+  // intercepts的使用示例
   @Intercepts({
       @Signature(type = Map.class, method = "get", args = {Object.class})})
   public static class AlwaysMapPlugin implements Interceptor {

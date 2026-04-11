@@ -19,11 +19,14 @@ import java.util.Properties;
 
 /**
  * @author Clinton Begin
+ * 拦截器
  */
 public interface Interceptor {
 
+  // Invocation为拦截到的目标方法
   Object intercept(Invocation invocation) throws Throwable;
 
+  // 可以输入一个对象来替换输入参数传入的目标对象
   default Object plugin(Object target) {
     return Plugin.wrap(target, this);
   }

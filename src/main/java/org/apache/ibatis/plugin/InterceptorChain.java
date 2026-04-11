@@ -27,6 +27,7 @@ public class InterceptorChain {
   private final List<Interceptor> interceptors = new ArrayList<>();
 
   public Object pluginAll(Object target) {
+    // 依次交给每个拦截器完成目标对象的替换工作
     for (Interceptor interceptor : interceptors) {
       target = interceptor.plugin(target);
     }

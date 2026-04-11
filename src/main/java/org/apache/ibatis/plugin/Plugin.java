@@ -28,11 +28,14 @@ import org.apache.ibatis.util.MapUtil;
 
 /**
  * @author Clinton Begin
+ * MyBatis 中一共只有四个类的对象可以被拦截器替换，它们分别是ParameterHandler、ResultSetHandler、StatementHandler 和 Executor。
+ * 而且替换只能发生在固定的地方，我们称其为拦截点。
  */
 public class Plugin implements InvocationHandler {
 
   private final Object target;
   private final Interceptor interceptor;
+  // 存储的是当前拦截器要拦截的类和方法
   private final Map<Class<?>, Set<Method>> signatureMap;
 
   private Plugin(Object target, Interceptor interceptor, Map<Class<?>, Set<Method>> signatureMap) {
