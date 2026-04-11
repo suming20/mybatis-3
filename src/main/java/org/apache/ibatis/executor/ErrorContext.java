@@ -23,6 +23,7 @@ public class ErrorContext {
   private static final String LINE_SEPARATOR = System.lineSeparator();
   private static final ThreadLocal<ErrorContext> LOCAL = ThreadLocal.withInitial(ErrorContext::new);
 
+  // 存储上一版的自身，从而组成错误链
   private ErrorContext stored;
   private String resource;
   private String activity;
