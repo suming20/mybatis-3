@@ -394,12 +394,16 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     return !context.isStopped() && context.getResultCount() < rowBounds.getLimit();
   }
 
+  // 基于内存做分页，会查询出全部数据，再分页
   private void skipRows(ResultSet rs, RowBounds rowBounds) throws SQLException {
     if (rs.getType() != ResultSet.TYPE_FORWARD_ONLY) {
+      // 进入该分支表示结果的游标不是只能单步前进
       if (rowBounds.getOffset() != RowBounds.NO_ROW_OFFSET) {
+        // 直接让游标移动到起始位置
         rs.absolute(rowBounds.getOffset());
       }
     } else {
+      // 进入该分支表示结果的游标只能单步前进
       for (int i = 0; i < rowBounds.getOffset(); i++) {
         if (!rs.next()) {
           break;

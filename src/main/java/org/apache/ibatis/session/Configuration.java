@@ -996,6 +996,7 @@ public class Configuration {
     }
   }
 
+  // 不允许覆盖其中的键值；杜绝了配置信息因为覆盖而发生的混乱
   protected static class StrictMap<V> extends HashMap<String, V> {
 
     private static final long serialVersionUID = -4950446264854982944L;

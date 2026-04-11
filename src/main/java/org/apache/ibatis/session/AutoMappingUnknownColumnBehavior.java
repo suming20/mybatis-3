@@ -24,6 +24,7 @@ import org.apache.ibatis.mapping.MappedStatement;
  *
  * @since 3.4.0
  * @author Kazuki Shimizu
+ * 表示自动映射中遇到一些未知的字段该如何处理。不处理；输出报警日志；抛出异常；
  */
 public enum AutoMappingUnknownColumnBehavior {
 
